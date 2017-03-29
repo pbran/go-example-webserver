@@ -30,3 +30,4 @@ pipeline:
     commands:
       - docker pull pbran/example-webserver
       - docker stack deploy -c ./docker-compose.yml example-webserver
+      - docker service scale example-webserver_server=3

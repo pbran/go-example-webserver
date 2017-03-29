@@ -4,14 +4,18 @@ pipeline:
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
     commands:
-      - docker build -t pbran/example-webserver:$DRONE_COMMIT_SHA .
+      - docker build \
+         --label org.label-schema.vcs-ref=$DRONE_COMMIT_SHA
+         --label build-number=$DRONE_BUILD_NUMBER
+         --label build-date="$(date)"
+         -t pbran/example-webserver:$DRONE_COMMIT_SHA .
 
   test:
     image: docker
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
     commands:
-      - docker run pbran/example-webserver:$DRONE_COMMIT_SHA /test.sh
+      - docker run pbran/example-webserver
 
   push:
     image: docker
@@ -21,13 +25,13 @@ pipeline:
       - /var/run/docker.sock:/var/run/docker.sock
     commands:
       - docker login -u pbran -p $PASS
-      - docker push pbran/example-webserver:$DRONE_COMMIT_SHA
+      - docker push pbran/example-webserver
 
   deploy:
     image: docker
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
     commands:
-      - docker pull pbran/example-webserver:$DRONE_COMMIT_SHA
+      - docker pull pbran/example-webserver
       - docker stack deploy -c ./docker-compose.yml example-webserver
       - docker service scale example-webserver_server=3

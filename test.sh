@@ -1,13 +1,11 @@
 #!/bin/bash
 set -eu
 
-exit 99
-
 /server &
 ID=$! # ID of webserver process, so we can kill it
 
 tests_passed=true
-expected="Hello From Golang and me"
+expected="Hello From Barnsley"
 output=$(curl -s localhost:8080)
 if [[ "$expected" != "$output" ]]; then
   echo "Test Failure"

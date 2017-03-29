@@ -11,7 +11,7 @@ pipeline:
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
     commands:
-      - docker run pbran/example-webserver
+      - docker run pbran/example-webserver  /test.sh
 
   push:
     image: docker

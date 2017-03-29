@@ -1,6 +1,8 @@
 #!/bin/bash
 set -eu
 
+exit 99
+
 /server &
 ID=$! # ID of webserver process, so we can kill it
 
